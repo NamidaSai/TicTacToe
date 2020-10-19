@@ -8,13 +8,14 @@
 using namespace std;
 
 void GameLoop(Player player1, Player player2, Board &board);
+void SwitchCurrentPlayer(Player player1, Player player2, Player &currentPlayer);
 void PlayerTurn(Player player, Board &board);
 
 int main()
 {
 	cout << "\n\n ***** TIC TAC TOE ***** \n\n";
 	cout << "This is a simple game of Tic Tac Toe.\n\n";
-	cout << "IMPORTANT: Please note that this program does not have proper error handling\nPlease carefully follow input instructions.\nPress Enter after input.\n";
+	cout << "IMPORTANT: Please note that this program may not have full error handling\nPlease carefully follow input instructions.\nPress Enter after input.\n";
 
 	cout << "\nYou will need two players.\n";
 	cout << "Player 1 name: \n";
@@ -63,20 +64,38 @@ int main()
 void GameLoop(Player player1, Player player2, Board &board)
 {
 	bool isPlayingRound = true;
+	Player currentPlayer = player1;
+	int turns = 0;
+	int maxTurns = board.GetNumberOfCells();
 
 	while (isPlayingRound)
 	{
-		PlayerTurn(player1, board);
-		isPlayingRound = !board.CheckForWin(player1);
-
-		if (!isPlayingRound)
+		turns++;
+		if (turns > maxTurns)
 		{
+			board.PrintBoard();
+			cout << "\nIt's a tie!\n";
+			isPlayingRound = false;
 			break;
 		}
-		
-		PlayerTurn(player2, board);
-		isPlayingRound = !board.CheckForWin(player2);
+
+		PlayerTurn(currentPlayer, board);
+		isPlayingRound = !board.CheckForWin(currentPlayer);
+		SwitchCurrentPlayer(player1, player2, currentPlayer);
 	}
+}
+
+void SwitchCurrentPlayer(Player player1, Player player2, Player &currentPlayer)
+{
+	if (currentPlayer.GetToken() == player1.GetToken())
+	{
+		currentPlayer = player2;
+	}
+	else
+	{
+		currentPlayer = player1;
+	}
+	
 }
 
 void PlayerTurn(Player player, Board &board)

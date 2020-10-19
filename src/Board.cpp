@@ -103,6 +103,12 @@ void Board::ClearBoard()
     }
 }
 
+int Board::GetNumberOfCells()
+{
+    int numberOfCells = _width * _height;
+    return numberOfCells;
+}
+
 
 //* ----- PRIVATE FUNCTIONS ----- *//
 
@@ -148,7 +154,7 @@ void Board::DefineWinCondition()
 	cout << "How many aligned tokens are needed to win the game? (2-" << maxGoal << ")\n";
 	cin >> _tokenGoal;
 
-	while (_tokenGoal > maxGoal)
+	while (_tokenGoal > maxGoal || _tokenGoal == 1)
 	{
 		cout << "That number does not fit the current board!\nPlease pick again (2-" << maxGoal << "): \n";
 		cin >> _tokenGoal;
@@ -215,5 +221,15 @@ bool Board::CheckColumns()
 
 bool Board::CheckDiagonals()
 {
+    int diagonalTokenCount = 0;
+
+    for (int x = 0; x < _width; ++x)
+    {
+        if (_board[0][x] == _board[0+1][x+1])
+        {
+            diagonalTokenCount++;
+        }
+    }
+
     return false;
 }

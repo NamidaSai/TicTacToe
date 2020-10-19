@@ -14,6 +14,7 @@ class Board
         void PrintBoard();
         bool CheckForWin(Player player);
         void ClearBoard();
+        int GetNumberOfCells();
 
     private:
         void SetBoardParams();
