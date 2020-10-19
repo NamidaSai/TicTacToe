@@ -1,6 +1,7 @@
 #include "Board.hpp"
 #include <iostream>
 #include <string>
+#include <cmath>
 
 using namespace std;
 
@@ -150,8 +151,10 @@ void Board::InitBoard()
 void Board::DefineWinCondition()
 {
 	int maxGoal = max(_width, _height);
+    int recommendedGoal = min(_width, _height);
 
-	cout << "How many aligned tokens are needed to win the game? (2-" << maxGoal << ")\n";
+	cout << "How many tokens in a row / column / diagonal are needed to win the game? (2-" << maxGoal << ")\n";
+    cout << "The recommended goal for this board is " << recommendedGoal << endl;
 	cin >> _tokenGoal;
 
 	while (_tokenGoal > maxGoal || _tokenGoal == 1)
@@ -222,12 +225,58 @@ bool Board::CheckColumns()
 bool Board::CheckDiagonals()
 {
     int diagonalTokenCount = 0;
+    int maxDiagonalCol = 1 + (_width - _tokenGoal);
+    int maxDiagonalRow = 1 + (_height - _tokenGoal);
 
-    for (int x = 0; x < _width; ++x)
+    // Check Forward Diagonals
+    for (int y = 0; y < maxDiagonalRow; ++y)
     {
-        if (_board[0][x] == _board[0+1][x+1])
+        for (int x = 0; x < maxDiagonalCol; ++x)
         {
-            diagonalTokenCount++;
+            if (_board[y][x] == '.') { continue; }
+
+            for (int i = 0; i < _tokenGoal; ++i)
+            {
+                if (_board[y][x] == _board[y+i][x+i])
+                {
+                    diagonalTokenCount++;
+                }
+            }
+
+            if (diagonalTokenCount >= _tokenGoal)
+            {
+                return true;
+            }
+            else
+            {
+                diagonalTokenCount = 0;
+            }
+        }
+    }
+
+    // Check Backwards Diagonals    
+    for (int y = 0; y < maxDiagonalRow; ++y)
+    {
+        for (int x = _width - 1; x >= _width - maxDiagonalCol; --x)
+        {
+            if (_board[y][x] == '.') { continue; }
+
+            for (int i = 0; i < _tokenGoal; ++i)
+            {
+                if (_board[y][x] == _board[y+i][x-i])
+                {
+                    diagonalTokenCount++;
+                }
+            }
+
+            if (diagonalTokenCount >= _tokenGoal)
+            {
+                return true;
+            }
+            else
+            {
+                diagonalTokenCount = 0;
+            }
         }
     }
 

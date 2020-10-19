@@ -104,11 +104,10 @@ void PlayerTurn(Player player, Board &board)
 	int yTargetPosition = 0;
 	bool isAvailablePosition = false;
 
-	board.PrintBoard();
-	cout << "It's " << player.GetName() << "'s turn.\nWhere would you like to play?\n";
-
 	while (!isAvailablePosition)
 	{
+		board.PrintBoard();
+		cout << "It's " << player.GetName() << "'s turn.\nWhere would you like to play?\n";
 		cout << "Column number: \n";
 		cin >> xTargetPosition;
 		cout << "Row number: \n";
